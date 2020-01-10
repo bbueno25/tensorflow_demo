@@ -1,8 +1,7 @@
-# Import MNIST data
 import input_data
-mnist = input_data.read_data_sets("data/", one_hot=True)
-
 import tensorflow as tf
+
+mnist = input_data.read_data_sets("data/", one_hot=True)
 
 # Set parameters
 learning_rate = 0.01
@@ -11,18 +10,18 @@ batch_size = 100
 display_step = 2
 
 # TF graph input
-x = tf.placeholder("float", [None, 784]) # mnist data image of shape 28*28=784
-y = tf.placeholder("float", [None, 10]) # 0-9 digits recognition => 10 classes
+#x = tf.placeholder("float", [None, 784]) # mnist data image of shape 28*28=784
+#y = tf.placeholder("float", [None, 10]) # 0-9 digits recognition => 10 classes
 
 # Create a model
 
 # Set model weights
-W = tf.Variable(tf.zeros([784, 10]))
-b = tf.Variable(tf.zeros([10]))
+W = tf.Variable(tf.ones(shape=(784, 10)), name="W")
+b = tf.Variable(tf.zeros(shape=(10)), name="b")
 
 with tf.name_scope("Wx_b") as scope:
     # Construct a linear model
-    model = tf.nn.softmax(tf.matmul(x, W) + b) # Softmax
+    model = tf.nn.softmax(tf.matmul(x, W) + b)
     
 # Add summary ops to collect data
 w_h = tf.summary.histogram("weights", W)
@@ -49,12 +48,8 @@ merged_summary_op = tf.summary.merge_all()
 # Launch the graph
 with tf.Session() as sess:
     sess.run(init)
-
-    
-    
     # Change this to a location on your computer
     summary_writer = tf.summary.FileWriter('data/logs', graph_def=sess.graph_def)
-
     # Training cycle
     for iteration in range(training_iteration):
         avg_cost = 0.
